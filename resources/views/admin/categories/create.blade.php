@@ -13,10 +13,12 @@
     @csrf
 
     <div class="mb-5">
-
         <x-admin.input 
             label="Category Name"
             name="name"
+            type="text"
+            value="{{ old('name') }}"
+            placeholder="Enter Category Name"
         />
         @error('name')
     <p class="text-red-500 text-sm mt-1">
@@ -27,15 +29,11 @@
     </div>
 
     <div class="mb-5">
-
-        <label class="block mb-2 font-medium">
-            Image
-        </label>
-
-        <input
-            type="file"
+        <x-admin.input 
+            label="Image"
             name="image"
-        >
+            type="file"
+        />
 @error('image')
     <p class="text-red-500 text-sm mt-1">
         {{ $message }}
