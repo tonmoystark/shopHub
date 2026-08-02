@@ -1,1 +1,9 @@
-<h1>Admin Dashboard</h1>
+@extends('admin.layouts.app')
+
+@section('content')
+
+<h1 class="text-3xl font-bold">
+    Dashboard
+</h1>
+
+@endsection
