@@ -2,67 +2,68 @@
 
 @section('content')
 
-<h1 class="text-2xl font-bold mb-6">
-    Add Category
-</h1>
+<x-admin.page
+    title="Create Category"
+    description="Add a new product category."
+>
 
-<form action="{{ route('categories.store') }}"
-      method="POST"
-      enctype="multipart/form-data">
+    <x-admin.card>
 
-    @csrf
+        <form
+            action="{{ route('categories.store') }}"
+            method="POST"
+            enctype="multipart/form-data"
+        >
 
-    <div class="mb-5">
-        <x-admin.input 
-            label="Category Name"
-            name="name"
-            type="text"
-            value="{{ old('name') }}"
-            placeholder="Enter Category Name"
-        />
-        @error('name')
-    <p class="text-red-500 text-sm mt-1">
-        {{ $message }}
-    </p>
-@enderror
+            @csrf
 
-    </div>
+            <div class="space-y-6">
 
-    <div class="mb-5">
-        <x-admin.input 
-            label="Image"
-            name="image"
-            type="file"
-        />
-@error('image')
-    <p class="text-red-500 text-sm mt-1">
-        {{ $message }}
-    </p>
-@enderror
-    </div>
+                <x-admin.input
+                    label="Category Name"
+                    name="name"
+                    placeholder="Enter category name"
+                />
 
-    <div class="mb-5">
+                <x-admin.image-upload
+                    name="image"
+                    label="Category Image"
+                />
 
-        <label>
+                <div>
 
-            <input
-                type="checkbox"
-                name="status"
-                value="1"
-                checked
-            >
+                    <x-admin.checkbox
+    name="status"
+    label="Active"
+    :checked="true"
+/>
 
-            Active
+                </div>
 
-        </label>
+                <div class="flex gap-3">
 
-    </div>
+                    <x-admin.button
+                        type="submit"
+                        variant="success"
+                    >
+                        Save Category
+                    </x-admin.button>
 
-    <x-admin.button
-        type="submit" variant="success">
-        Save Category
-    </x-admin.button>
+                    <x-admin.button
+                        href="{{ route('categories.index') }}"
+                        variant="secondary"
+                    >
+                        Cancel
+                    </x-admin.button>
 
-</form>
+                </div>
+
+            </div>
+
+        </form>
+
+    </x-admin.card>
+
+</x-admin.page>
 
 @endsection

@@ -2,12 +2,10 @@
 
 @section('content')
 
-<div class="max-w-5xl mx-auto">
-
-    <x-admin.page-header
-        title="Edit Category"
-        description="Update category information."
-    />
+<x-admin.page
+    title="Edit Category"
+    description="Update category information."
+>
 
     <x-admin.card>
 
@@ -20,54 +18,55 @@
             @csrf
             @method('PUT')
 
-            <x-admin.input
-                label="Category Name"
-                name="name"
-                :value="$category->name"
-            />
+            <div class="space-y-6">
 
-            <div class="mb-5">
+                <x-admin.input
+                    label="Category Name"
+                    name="name"
+                    :value="$category->name"
+                    placeholder="Enter category name"
+                />
 
-                <label class="mb-2 block text-sm font-medium">
-                    Category Image
-                </label>
-
-                <img
-                    src="{{ asset('storage/'.$category->image) }}"
-                    class="mb-3 h-24 w-24 rounded-lg object-cover"
-                >
-
-                <input
-                    type="file"
+                <x-admin.image-upload
                     name="image"
-                >
+                    label="Category Image"
+                    :preview="$category->image ? asset('storage/'.$category->image) : null"
+                />
+
+                <div>
+
+                    <x-admin.checkbox
+    name="status"
+    label="Active"
+    :checked="$category->status"
+/>
+
+                </div>
+
+                <div class="flex gap-3">
+
+                    <x-admin.button
+                        type="submit"
+                        variant="success"
+                    >
+                        Update Category
+                    </x-admin.button>
+
+                    <x-admin.button
+                        href="{{ route('categories.index') }}"
+                        variant="secondary"
+                    >
+                        Cancel
+                    </x-admin.button>
+
+                </div>
 
             </div>
-
-            <label class="mb-6 flex items-center gap-2">
-
-                <input
-                    type="checkbox"
-                    name="status"
-                    value="1"
-                    @checked($category->status)
-                >
-
-                Active
-
-            </label>
-
-            <x-admin.button
-                type="submit"
-                variant="success"
-            >
-                Update Category
-            </x-admin.button>
 
         </form>
 
     </x-admin.card>
 
-</div>
+</x-admin.page>
 
 @endsection

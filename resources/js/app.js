@@ -2,6 +2,7 @@
 import Swal from 'sweetalert2';
 import Alpine from 'alpinejs';
 import './admin/delete-confirmation';
+import './admin/image-preview';
 window.Alpine = Alpine;
 window.Swal = Swal;
 
