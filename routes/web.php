@@ -12,7 +12,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
-    ->middleware('auth')
+    ->middleware(['auth', 'admin'])
     ->name('admin.dashboard');
 
 Route::middleware('auth')->group(function () {
