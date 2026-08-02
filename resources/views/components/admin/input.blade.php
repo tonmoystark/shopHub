@@ -1,7 +1,8 @@
 @props([
-    'label' => '',
+    'label' => null,
     'name',
     'type' => 'text',
+    'value' => '',
 ])
 
 <div class="mb-5">
@@ -19,7 +20,7 @@
         id="{{ $name }}"
         name="{{ $name }}"
         type="{{ $type }}"
-        value="{{ old($name) }}"
+        value="{{ old($name, $value) }}"
         {{ $attributes->merge([
             'class' => 'w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition'
         ]) }}

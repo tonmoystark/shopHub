@@ -91,13 +91,29 @@
 
                     <div class="flex justify-center gap-2">
 
-                        <x-admin.button variant="secondary">
-                            Edit
-                        </x-admin.button>
+                        <x-admin.button
+    href="{{ route('categories.edit', $category) }}"
+    variant="secondary"
+>
+    Edit
+</x-admin.button>
 
-                        <x-admin.button variant="danger">
-                            Delete
-                        </x-admin.button>
+<form
+    action="{{ route('categories.destroy', $category) }}"
+    method="POST"
+    class="inline delete-form"
+>
+    @csrf
+    @method('DELETE')
+
+    <x-admin.button
+        type="submit"
+        variant="danger"
+    >
+        Delete
+    </x-admin.button>
+
+</form>
 
                     </div>
 

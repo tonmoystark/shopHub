@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -12,6 +14,10 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct(
+        protected CategoryService $categoryService
+    ) {}
     public function index()
     {
         $categories = Category::latest()->paginate(10);
@@ -31,25 +37,14 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $validated = $request->validated();
-
-        if ($request->hasFile('image')) {
-
-            $validated['image'] = $request->file('image')
-                ->store('categories', 'public');
-        }
-
-        $validated['slug'] = Str::slug($validated['name']);
-
-        $validated['status'] = $request->boolean('status');
-
-        Category::create($validated);
+        $this->categoryService->store(
+            $request->validated()
+        );
 
         return redirect()
             ->route('categories.index')
             ->with('success', 'Category created successfully.');
     }
-
     /**
      * Display the specified resource.
      */
@@ -63,15 +58,24 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
-    {
-        //
+    public function update(
+        UpdateCategoryRequest $request,
+        Category $category
+    ) {
+        $this->categoryService->update(
+            $category,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Category updated successfully.');
     }
 
     /**
@@ -79,6 +83,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $this->categoryService->delete($category);
+
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Category deleted successfully.');
     }
 }
