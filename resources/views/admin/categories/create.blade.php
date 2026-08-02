@@ -14,16 +14,10 @@
 
     <div class="mb-5">
 
-        <label class="block mb-2 font-medium">
-            Category Name
-        </label>
-
-        <input
-            type="text"
+        <x-admin.input 
+            label="Category Name"
             name="name"
-            class="w-full border rounded px-4 py-2"
-            value="{{ old('name') }}"
-        >
+        />
         @error('name')
     <p class="text-red-500 text-sm mt-1">
         {{ $message }}
@@ -66,10 +60,10 @@
 
     </div>
 
-    <button
-        class="bg-green-600 text-white px-5 py-2 rounded">
+    <x-admin.button
+        type="submit" variant="success">
         Save Category
-    </button>
+    </x-admin.button>
 
 </form>
 
