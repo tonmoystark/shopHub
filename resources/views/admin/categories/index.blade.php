@@ -1,28 +1,131 @@
+@extends('admin.layouts.app')
 
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-<div class="max-w-5xl mx-auto">
-<h1 class="text-2xl font-bold mb-5">
-    Categories
-</h1>
+@section('content')
 
-@forelse($categories as $category)
+<div class="max-w-6xl mx-auto">
 
-    <p>{{ $category->name }}</p>
-
-@empty
-
-    <p>No Categories Found.</p>
-
-@endforelse
-
-<div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Categories</h1>
-
-    <a href="{{ route('categories.create') }}">
-        <x-admin.button variant="primary">
-            Add Category
+    <x-admin.page-header
+        title="Categories"
+        description="Manage all product categories."
+    >
+        <x-admin.button
+            href="{{ route('categories.create') }}"
+        >
+            + Add Category
         </x-admin.button>
-    </a>
-</div>
+    </x-admin.page-header>
+
+    <x-admin.card>
+
+       <x-admin.table>
+
+    <thead class="bg-gray-50">
+
+        <tr>
+
+            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Image
+            </th>
+
+            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Name
+            </th>
+
+            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Slug
+            </th>
+
+            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Status
+            </th>
+
+            <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Actions
+            </th>
+
+        </tr>
+
+    </thead>
+
+    <tbody class="divide-y divide-gray-200 bg-white">
+
+        @forelse($categories as $category)
+
+            <tr class="hover:bg-gray-50 transition">
+
+                <td class="px-6 py-4">
+                    <img
+                        src="{{ asset('storage/' . $category->image) }}"
+                        alt="{{ $category->name }}"
+                        class="h-14 w-14 rounded-lg object-cover"
+                    >
+                </td>
+
+                <td class="px-6 py-4 font-medium">
+                    {{ $category->name }}
+                </td>
+
+                <td class="px-6 py-4 text-gray-500">
+                    {{ $category->slug }}
+                </td>
+
+                <td class="px-6 py-4">
+
+                    @if($category->status)
+
+    <x-admin.badge variant="success">
+        Active
+    </x-admin.badge>
+
+@else
+
+    <x-admin.badge variant="danger">
+        Inactive
+    </x-admin.badge>
+
+@endif
+
+                </td>
+
+                <td class="px-6 py-4 text-center">
+
+                    <div class="flex justify-center gap-2">
+
+                        <x-admin.button variant="secondary">
+                            Edit
+                        </x-admin.button>
+
+                        <x-admin.button variant="danger">
+                            Delete
+                        </x-admin.button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        @empty
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="px-6 py-8 text-center text-gray-500"
+                >
+                    No Categories Found.
+                </td>
+
+            </tr>
+
+        @endforelse
+
+    </tbody>
+
+</x-admin.table>
+
+    </x-admin.card>
 
 </div>
+
+@endsection

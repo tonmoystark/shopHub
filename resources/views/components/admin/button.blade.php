@@ -1,6 +1,8 @@
+
 @props([
     'type' => 'button',
     'variant' => 'primary',
+    'href' => null,
 ])
 
 @php
@@ -12,13 +14,30 @@
         'outline' => 'border border-gray-300 hover:bg-gray-100 text-gray-800',
         default => 'bg-blue-600 hover:bg-blue-700 text-white',
     };
+
+    $baseClasses = "inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200 shadow-sm $classes";
 @endphp
+
+@if($href)
+
+<a
+    href="{{ $href }}"
+    {{ $attributes->merge([
+        'class' => $baseClasses
+    ]) }}
+>
+    {{ $slot }}
+</a>
+
+@else
 
 <button
     type="{{ $type }}"
     {{ $attributes->merge([
-        'class' => "inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 $classes"
+        'class' => $baseClasses
     ]) }}
 >
     {{ $slot }}
 </button>
+
+@endif
