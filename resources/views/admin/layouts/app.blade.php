@@ -22,6 +22,7 @@
             @include('admin.partials.navbar')
 
             <main class="p-6">
+                @include('admin.partials.flash-message')
                 @yield('content')
             </main>
 
