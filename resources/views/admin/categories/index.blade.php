@@ -124,6 +124,9 @@
             </tbody>
 
         </x-admin.table>
+        <div class="border-t border-gray-200 px-6 py-4">
+        {{ $categories->links() }}
+    </div>
 
     </x-admin.card>
 
