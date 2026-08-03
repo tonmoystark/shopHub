@@ -2,28 +2,77 @@
 
 namespace App\Http\Requests\Product;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+
+            'category_id' => ['required', 'exists:categories,id'],
+
+            'name' => ['required', 'string', 'max:255'],
+
+            'sku' => ['required', 'string', 'max:100', 'unique:products,sku'],
+
+            'description' => ['nullable', 'string'],
+
+            'price' => ['required', 'numeric', 'min:0'],
+
+            'sale_price' => [
+                'nullable',
+                'numeric',
+                'min:0',
+                'lte:price',
+            ],
+
+            'stock' => ['required', 'integer', 'min:0'],
+
+            'status' => ['nullable', 'boolean'],
+
+            'is_featured' => ['nullable', 'boolean'],
+
+            'images' => ['required', 'array', 'min:1'],
+
+            'images.*' => [
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:2048',
+            ],
+
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+
+            'category_id.required' => 'Please select a category.',
+
+            'category_id.exists' => 'Selected category does not exist.',
+
+            'name.required' => 'Product name is required.',
+
+            'sku.required' => 'SKU is required.',
+
+            'sku.unique' => 'This SKU already exists.',
+
+            'price.required' => 'Price is required.',
+
+            'sale_price.lte' => 'Sale price cannot be greater than the regular price.',
+
+            'stock.required' => 'Stock quantity is required.',
+
+            'images.required' => 'Please upload at least one product image.',
+
+            'images.*.image' => 'Each uploaded file must be an image.',
+
         ];
     }
 }

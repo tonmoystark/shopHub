@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('category_id')
                 ->constrained()
                 ->cascadeOnUpdate()
-                ->restrictOnDelete();
+                ->restrictOnDelete()
+                ->index();
 
             $table->string('name');
 

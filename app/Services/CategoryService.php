@@ -8,13 +8,20 @@ use Illuminate\Support\Str;
 
 class CategoryService
 {
+
+    public function __construct(
+        protected SlugService $slugService
+    ) {}
     public function store(array $data): Category
     {
         if (isset($data['image'])) {
             $data['image'] = $data['image']->store('categories', 'public');
         }
 
-        $data['slug'] = Str::slug($data['name']);
+        $data['slug'] = $this->slugService->generate(
+            $data['name'],
+            Category::class
+        );
 
         $data['status'] = $data['status'] ?? false;
 
@@ -32,7 +39,11 @@ class CategoryService
             $data['image'] = $data['image']->store('categories', 'public');
         }
 
-        $data['slug'] = Str::slug($data['name']);
+        $data['slug'] = $this->slugService->generate(
+            $data['name'],
+            \App\Models\Category::class,
+            $category->id
+        );
 
         $data['status'] = $data['status'] ?? false;
 
