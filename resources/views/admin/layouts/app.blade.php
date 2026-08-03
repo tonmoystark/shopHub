@@ -10,7 +10,7 @@
 
 <body class="bg-gray-100">
 
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen" x-data="{ sidebarOpen: false }">
 
         {{-- Sidebar --}}
         @include('admin.partials.sidebar')

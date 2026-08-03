@@ -18,11 +18,23 @@ class CategoryController extends Controller
     public function __construct(
         protected CategoryService $categoryService
     ) {}
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::latest()->paginate(10);
+        $search = $request->search;
 
-        return view('admin.categories.index', compact('categories'));
+        $categories = Category::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('slug', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.categories.index', compact(
+            'categories',
+            'search'
+        ));
     }
     /**
      * Show the form for creating a new resource.

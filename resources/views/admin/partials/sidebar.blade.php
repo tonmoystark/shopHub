@@ -1,23 +1,40 @@
-<div class="w-64 bg-slate-900 text-white min-h-screen p-6">
+{{-- Overlay --}}
+<div
+    x-show="sidebarOpen"
+    x-transition.opacity
+    class="fixed inset-0 z-40 bg-black/50 lg:hidden"
+    @click="sidebarOpen = false"
+></div>
 
-    <h2 class="text-2xl font-bold mb-8">
-        ShopHub
-    </h2>
+{{-- Sidebar --}}
+<aside
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white transform transition-transform duration-300 lg:static lg:translate-x-0"
 
-    <ul class="space-y-3">
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+>
 
-        <li>Dashboard</li>
+    <div class="p-6">
 
-        <li>Products</li>
+        <h2 class="mb-8 text-2xl font-bold">
+            ShopHub
+        </h2>
 
-        <li>Categories</li>
+        <ul class="space-y-3">
 
-        <li>Brands</li>
+            <li>Dashboard</li>
 
-        <li>Orders</li>
+            <li>Products</li>
 
-        <li>Customers</li>
+            <li>Categories</li>
 
-    </ul>
+            <li>Brands</li>
 
-</div>
+            <li>Orders</li>
+
+            <li>Customers</li>
+
+        </ul>
+
+    </div>
+
+</aside>

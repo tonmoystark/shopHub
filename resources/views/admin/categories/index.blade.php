@@ -8,12 +8,22 @@
 >
 
     <x-slot:actions>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+
+        <x-admin.search
+            placeholder="Search categories..."
+        />
+
         <x-admin.button
             href="{{ route('categories.create') }}"
         >
             + Add Category
         </x-admin.button>
-    </x-slot:actions>
+
+    </div>
+
+</x-slot:actions>
 
     <x-admin.card>
 
@@ -29,9 +39,9 @@
                         Name
                     </th>
 
-                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-                        Slug
-                    </th>
+                    <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+    Slug
+</th>
 
                     <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
                         Status
@@ -61,9 +71,9 @@
                             {{ $category->name }}
                         </td>
 
-                        <td class="px-6 py-4 text-gray-500">
-                            {{ $category->slug }}
-                        </td>
+                        <td class="hidden md:table-cell px-6 py-4 text-gray-500">
+    {{ $category->slug }}
+</td>
 
                         <td class="px-6 py-4">
                             @if($category->status)
@@ -110,16 +120,33 @@
 
                 @empty
 
-                    <tr>
-                        <td
-                            colspan="5"
-                            class="px-6 py-8 text-center text-gray-500"
-                        >
-                            No Categories Found.
-                        </td>
-                    </tr>
+<tr>
+    <td colspan="5" class="p-8">
 
-                @endforelse
+        <x-admin.empty-state
+            title="No Categories Found"
+            description="Create your first category to get started."
+        >
+        <x-slot:icon>
+        <!-- Any SVG -->
+    </x-slot:icon>
+
+            <x-slot:action>
+
+                <x-admin.button
+                    href="{{ route('categories.create') }}"
+                >
+                    + Add Category
+                </x-admin.button>
+
+            </x-slot:action>
+
+        </x-admin.empty-state>
+
+    </td>
+</tr>
+
+@endforelse
 
             </tbody>
 
