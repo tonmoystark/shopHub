@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -58,5 +59,13 @@ class CategoryService
         }
 
         $category->delete();
+    }
+
+    public function getForSelect(): Collection
+    {
+        return Category::query()
+            ->where('status', true)
+            ->orderBy('name')
+            ->get(['id', 'name']);
     }
 }

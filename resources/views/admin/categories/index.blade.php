@@ -16,7 +16,7 @@
         />
 
         <x-admin.button
-            href="{{ route('categories.create') }}"
+            href="{{ route('admin.categories.create') }}"
         >
             + Add Category
         </x-admin.button>
@@ -91,14 +91,14 @@
                             <div class="flex justify-center gap-2">
 
                                 <x-admin.button
-                                    href="{{ route('categories.edit', $category) }}"
+                                    href="{{ route('admin.categories.edit', $category) }}"
                                     variant="secondary"
                                 >
                                     Edit
                                 </x-admin.button>
 
                                 <form
-                                    action="{{ route('categories.destroy', $category) }}"
+                                    action="{{ route('admin.categories.destroy', $category) }}"
                                     method="POST"
                                     class="delete-form inline"
                                 >
@@ -134,7 +134,7 @@
             <x-slot:action>
 
                 <x-admin.button
-                    href="{{ route('categories.create') }}"
+                    href="{{ route('admin.categories.create') }}"
                 >
                     + Add Category
                 </x-admin.button>

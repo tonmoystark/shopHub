@@ -10,7 +10,7 @@
     <x-admin.card>
 
         <form
-            action="{{ route('categories.store') }}"
+            action="{{ route('admin.categories.store') }}"
             method="POST"
             enctype="multipart/form-data"
         >
@@ -40,23 +40,10 @@
 
                 </div>
 
-                <div class="flex gap-3">
-
-                    <x-admin.button
-                        type="submit"
-                        variant="success"
-                    >
-                        Save Category
-                    </x-admin.button>
-
-                    <x-admin.button
-                        href="{{ route('categories.index') }}"
-                        variant="secondary"
-                    >
-                        Cancel
-                    </x-admin.button>
-
-                </div>
+                <x-admin.form-actions
+    submitText="Save Category"
+    :cancel="route('admin.categories.index')"
+/>
 
             </div>
 

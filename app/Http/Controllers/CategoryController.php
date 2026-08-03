@@ -54,7 +54,7 @@ class CategoryController extends Controller
         );
 
         return redirect()
-            ->route('categories.index')
+            ->route('admin.categories.index')
             ->with('success', 'Category created successfully.');
     }
     /**
@@ -86,7 +86,7 @@ class CategoryController extends Controller
         );
 
         return redirect()
-            ->route('categories.index')
+            ->route('admin.categories.index')
             ->with('success', 'Category updated successfully.');
     }
 
@@ -98,7 +98,7 @@ class CategoryController extends Controller
         $this->categoryService->delete($category);
 
         return redirect()
-            ->route('categories.index')
+            ->route('admin.categories.index')
             ->with('success', 'Category deleted successfully.');
     }
 }
