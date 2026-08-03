@@ -24,6 +24,113 @@
         </div>
 
     </x-slot:actions>
+    <form
+    id="product-filters"
+    method="GET"
+    class="mb-6 grid gap-4 md:grid-cols-5"
+>
+
+    <x-admin.search
+        name="search"
+        :value="$search"
+        placeholder="Search products..."
+    />
+
+    <x-admin.select
+        name="category_id"
+    >
+
+        <option value="">
+            All Categories
+        </option>
+
+        @foreach($categories as $category)
+
+            <option
+                value="{{ $category->id }}"
+                @selected(request('category') == $category->id)
+            >
+                {{ $category->name }}
+            </option>
+
+        @endforeach
+
+    </x-admin.select>
+
+    <x-admin.select name="status">
+
+        <option value="">
+            All Status
+        </option>
+
+        <option
+            value="1"
+            @selected(request('status')==='1')
+        >
+            Active
+        </option>
+
+        <option
+            value="0"
+            @selected(request('status')==='0')
+        >
+            Inactive
+        </option>
+
+    </x-admin.select>
+
+    <x-admin.select name="featured">
+
+        <option value="">
+            Featured?
+        </option>
+
+        <option
+            value="1"
+            @selected(request('featured')==='1')
+        >
+            Yes
+        </option>
+
+        <option
+            value="0"
+            @selected(request('featured')==='0')
+        >
+            No
+        </option>
+
+    </x-admin.select>
+
+    <x-admin.select name="stock">
+
+        <option value="">
+            Stock
+        </option>
+
+        <option
+            value="available"
+            @selected(request('stock')==='available')
+        >
+            In Stock
+        </option>
+
+        <option
+            value="low"
+            @selected(request('stock')==='low')
+        >
+            Low Stock
+        </option>
+
+        <option
+            value="out"
+            @selected(request('stock')==='out')
+        >
+            Out of Stock
+        </option>
+
+    </x-admin.select>
+
+</form>
 
     <x-admin.card>
 
@@ -43,10 +150,6 @@
 
                     <th class="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">
                         Category
-                    </th>
-
-                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">
-                        SKU
                     </th>
 
                     <th class="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">
@@ -95,25 +198,79 @@
 
                         </td>
 
-                        <td class="px-6 py-4 font-medium">
-                            {{ $product->name }}
-                        </td>
-
                         <td class="px-6 py-4">
+
+    <h3 class="font-semibold text-gray-900">
+        {{ $product->name }}
+    </h3>
+
+    <p class="text-sm text-gray-500">
+        SKU: {{ $product->sku }}
+    </p>
+
+    @if($product->is_featured)
+
+        <div class="mt-2">
+
+            <x-admin.badge variant="warning">
+                ⭐ Featured
+            </x-admin.badge>
+
+        </div>
+
+    @endif
+
+</td>
+
+                        <td class="px-6 py-4 text-gray-600">
                             {{ $product->category->name }}
                         </td>
 
                         <td class="px-6 py-4">
-                            {{ $product->sku }}
-                        </td>
+
+    @if($product->sale_price)
+
+        <p class="text-sm text-gray-400 line-through">
+            ৳{{ number_format($product->price, 2) }}
+        </p>
+
+        <p class="font-semibold text-green-600">
+            ৳{{ number_format($product->sale_price, 2) }}
+        </p>
+
+    @else
+
+        <p class="font-semibold">
+            ৳{{ number_format($product->price, 2) }}
+        </p>
+
+    @endif
+
+</td>
 
                         <td class="px-6 py-4">
-                            ${{ number_format($product->price, 2) }}
-                        </td>
 
-                        <td class="px-6 py-4">
-                            {{ $product->stock }}
-                        </td>
+    @if($product->stock == 0)
+
+        <x-admin.badge variant="danger">
+            Out of Stock
+        </x-admin.badge>
+
+    @elseif($product->stock <= 5)
+
+        <x-admin.badge variant="warning">
+            Low Stock ({{ $product->stock }})
+        </x-admin.badge>
+
+    @else
+
+        <x-admin.badge variant="success">
+            In Stock ({{ $product->stock }})
+        </x-admin.badge>
+
+    @endif
+
+</td>
 
                         <td class="px-6 py-4">
 

@@ -23,20 +23,77 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
+        $category = $request->category_id;
+        $status = $request->status;
+        $featured = $request->featured;
+        $stock = $request->stock;
 
-        $products = Product::with(['category', 'images'])
+        $products = Product::with([
+            'category',
+            'images',
+        ])
+
             ->when($search, function ($query) use ($search) {
 
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('sku', 'like', "%{$search}%");
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('sku', 'like', "%{$search}%");
+                });
             })
+
+            ->when($category, function ($query) use ($category) {
+
+                $query->where('category_id', $category);
+            })
+
+            ->when($status !== null && $status !== '', function ($query) use ($status) {
+
+                $query->where('status', $status);
+            })
+
+            ->when($featured !== null && $featured !== '', function ($query) use ($featured) {
+
+                $query->where('is_featured', $featured);
+            })
+
+            ->when($stock, function ($query) use ($stock) {
+
+                if ($stock == 'low') {
+
+                    $query->whereBetween('stock', [1, 5]);
+                }
+
+                if ($stock == 'out') {
+
+                    $query->where('stock', 0);
+                }
+
+                if ($stock == 'available') {
+
+                    $query->where('stock', '>', 5);
+                }
+            })
+
             ->latest()
+
             ->paginate(10)
+
             ->withQueryString();
+
+        $categories = $this->categoryService->getForSelect();
 
         return view(
             'admin.products.index',
-            compact('products', 'search')
+            compact(
+                'products',
+                'categories',
+                'search',
+                'category',
+                'status',
+                'featured',
+                'stock'
+            )
         );
     }
 

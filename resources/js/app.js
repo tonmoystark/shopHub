@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import Alpine from 'alpinejs';
 import './admin/delete-confirmation';
 import './admin/image-preview';
-import './admin/search';
+import './admin/filters';
 window.Alpine = Alpine;
 window.Swal = Swal;
 
