@@ -15,7 +15,8 @@ class SlugService
         $count = 1;
 
         while (
-            $modelClass::where('slug', $slug)
+            $modelClass::withTrashed()
+            ->where('slug', $slug)
             ->when($ignoreId, fn($query) => $query->where('id', '!=', $ignoreId))
             ->exists()
         ) {

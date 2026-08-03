@@ -7,9 +7,11 @@ use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Services\CategoryService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -22,7 +24,7 @@ class ProductController extends Controller
     {
         $search = $request->search;
 
-        $products = Product::with('category')
+        $products = Product::with(['category', 'images'])
             ->when($search, function ($query) use ($search) {
 
                 $query->where('name', 'like', "%{$search}%")
@@ -56,7 +58,7 @@ class ProductController extends Controller
         );
 
         return redirect()
-            ->route('products.index')
+            ->route('admin.products.index')
             ->with('success', 'Product created successfully.');
     }
 
@@ -91,7 +93,7 @@ class ProductController extends Controller
         );
 
         return redirect()
-            ->route('products.index')
+            ->route('admin.products.index')
             ->with('success', 'Product updated successfully.');
     }
 
@@ -100,7 +102,26 @@ class ProductController extends Controller
         $this->productService->delete($product);
 
         return redirect()
-            ->route('products.index')
+            ->route('admin.products.index')
             ->with('success', 'Product deleted successfully.');
+    }
+
+    public function destroyImage(ProductImage $image)
+    {
+        try {
+
+            $this->productService->deleteImage($image);
+
+            return back()->with(
+                'success',
+                'Image deleted successfully.'
+            );
+        } catch (ValidationException $e) {
+
+            return back()->with(
+                'error',
+                $e->errors()['image'][0]
+            );
+        }
     }
 }

@@ -24,6 +24,11 @@ Route::middleware(['auth', 'admin'])
         Route::resource('categories', CategoryController::class);
 
         Route::resource('products', ProductController::class);
+
+        Route::delete(
+            'products/images/{image}',
+            [ProductController::class, 'destroyImage']
+        )->name('products.images.destroy');
     });
 
 Route::middleware('auth')->group(function () {

@@ -9,147 +9,77 @@
 
     <x-admin.card>
 
-        <form
-            action="{{ route('admin.products.update', $product) }}"
-            method="POST"
-            enctype="multipart/form-data"
-        >
+    {{-- Image Gallery --}}
+    <div class="mb-8">
 
-            @csrf
-            @method('PUT')
+        <h3 class="mb-4 text-sm font-semibold text-gray-700">
+            Current Images
+        </h3>
 
-            <div class="grid gap-6 md:grid-cols-2">
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
 
-                <x-admin.input
-                    name="name"
-                    label="Product Name"
-                    :value="$product->name"
-                    required
-                />
+            @foreach($product->images as $image)
 
-                <x-admin.select
-                    name="category_id"
-                    label="Category"
-                    required
-                >
+                <div class="overflow-hidden rounded-xl border bg-white shadow-sm">
 
-                    <option value="">
-                        Select Category
-                    </option>
+                    <img
+                        src="{{ asset('storage/' . $image->image) }}"
+                        class="h-40 w-full object-cover"
+                        alt="Product Image"
+                    >
 
-                    @foreach($categories as $category)
+                    <div class="p-3">
 
-                        <option
-                            value="{{ $category->id }}"
-                            @selected(old('category_id', $product->category_id) == $category->id)
+                        <form
+                            action="{{ route('admin.products.images.destroy', $image) }}"
+                            method="POST"
+                            class="delete-form"
                         >
-                            {{ $category->name }}
-                        </option>
+                            @csrf
+                            @method('DELETE')
 
-                    @endforeach
+                            <x-admin.button
+                                type="submit"
+                                variant="danger"
+                                class="w-full"
+                            >
+                                Delete Image
+                            </x-admin.button>
 
-                </x-admin.select>
+                        </form>
 
-                <x-admin.input
-                    name="sku"
-                    label="SKU"
-                    :value="$product->sku"
-                    required
-                />
-
-                <x-admin.input
-                    name="stock"
-                    type="number"
-                    :value="$product->stock"
-                    label="Stock"
-                    required
-                />
-
-                <x-admin.input
-                    name="price"
-                    type="number"
-                    step="0.01"
-                    :value="$product->price"
-                    label="Price"
-                    required
-                />
-
-                <x-admin.input
-                    name="sale_price"
-                    type="number"
-                    step="0.01"
-                    :value="$product->sale_price"
-                    label="Sale Price"
-                />
-
-            </div>
-
-            <x-admin.textarea
-                name="description"
-                label="Description"
-                rows="6"
-                :value="$product->description"
-            />
-
-            <div class="mt-6 flex flex-col gap-4 sm:flex-row sm:gap-8">
-
-                <x-admin.checkbox
-                    name="status"
-                    label="Active"
-                    :checked="$product->status"
-                />
-
-                <x-admin.checkbox
-                    name="is_featured"
-                    label="Featured Product"
-                    :checked="$product->is_featured"
-                />
-
-            </div>
-
-            <div class="mt-6">
-
-                <h3 class="mb-4 text-sm font-semibold text-gray-700">
-                    Current Images
-                </h3>
-
-                <div class="mb-6 flex flex-wrap gap-4">
-
-                    @forelse($product->images as $image)
-
-                        <img
-                            src="{{ asset('storage/' . $image->image) }}"
-                            alt="Product Image"
-                            class="h-28 w-28 rounded-xl border object-cover"
-                        >
-
-                    @empty
-
-                        <p class="text-sm text-gray-500">
-                            No images uploaded.
-                        </p>
-
-                    @endforelse
+                    </div>
 
                 </div>
 
-                <x-admin.image-upload
-                    name="images"
-                    label="Add More Images"
-                    multiple
-                    help="Upload additional images. Existing images will remain."
-                />
+            @endforeach
 
-            </div>
+        </div>
 
-            <x-admin.form-actions
-                submitText="Update Product"
-                :cancel="route('admin.products.index')"
-            />
+    </div>
 
-        </form>
+    {{-- Product Update Form --}}
+    <form
+    action="{{ route('admin.products.update', $product) }}"
+    method="POST"
+    enctype="multipart/form-data"
+>
 
-    </x-admin.card>
+    @csrf
+    @method('PUT')
+
+    @include('admin.products._form', [
+    'product' => $product,
+])
+
+    <x-admin.form-actions
+        submitText="Update Product"
+        :cancel="route('admin.products.index')"
+    />
+
+</form>
+
+</x-admin.card>
 
 </x-admin.page>
 

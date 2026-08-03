@@ -5,7 +5,7 @@ namespace App\Http\Requests\Product;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreProductRequest extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -39,7 +39,7 @@ class StoreProductRequest extends FormRequest
 
             'is_featured' => ['nullable', 'boolean'],
 
-            'images' => ['required', 'array', 'min:1'],
+            'images' => ['nullable', 'array'],
 
             'images.*' => [
                 'image',

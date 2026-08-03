@@ -4,9 +4,11 @@ namespace App\Services;
 
 use App\Services\SlugService;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class ProductService
 {
@@ -84,5 +86,19 @@ class ProductService
         }
 
         $product->delete();
+    }
+
+    public function deleteImage(ProductImage $image): void
+    {
+        if ($image->product->images()->count() <= 1) {
+
+            throw ValidationException::withMessages([
+                'image' => 'A product must have at least one image.',
+            ]);
+        }
+
+        Storage::disk('public')->delete($image->image);
+
+        $image->delete();
     }
 }
