@@ -47,12 +47,12 @@ class Product extends Model
 
     public function currentPrice(): float
     {
-        return $this->sale_price ?: $this->price;
+        return $this->sale_price ?? $this->price;
     }
 
     public function primaryImage(): ?ProductImage
     {
-        return $this->images()->first();
+        return $this->images->first();
     }
     public function isInStock(): bool
     {
@@ -61,5 +61,15 @@ class Product extends Model
     public function isLowStock(): bool
     {
         return $this->stock > 0 && $this->stock <= 5;
+    }
+    public function getPrimaryImageUrlAttribute(): string
+    {
+        return $this->primaryImage()
+            ? asset('storage/' . $this->primaryImage()->image)
+            : asset('images/placeholder-product.png');
+    }
+    public function isOnSale(): bool
+    {
+        return ! is_null($this->sale_price);
     }
 }
