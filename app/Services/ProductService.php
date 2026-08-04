@@ -15,6 +15,20 @@ class ProductService
     public function __construct(
         protected SlugService $slugService
     ) {}
+
+    public function getFilteredProducts(array $filters)
+    {
+        return Product::query()
+            ->withFrontendData()
+            ->search($filters['search'] ?? null)
+            ->category($filters['category_id'] ?? null)
+            ->status($filters['status'] ?? null)
+            ->featured($filters['featured'] ?? null)
+            ->stock($filters['stock'] ?? null)
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+    }
     public function store(array $data): Product
     {
         return DB::transaction(function () use ($data) {
@@ -100,5 +114,21 @@ class ProductService
         Storage::disk('public')->delete($image->image);
 
         $image->delete();
+    }
+
+    public function getProduct(Product $product): Product
+    {
+        return $product->load([
+            'category',
+            'images',
+        ]);
+    }
+    public function getFrontendProducts()
+    {
+        return Product::query()
+            ->active()
+            ->withFrontendData()
+            ->latest()
+            ->paginate(12);
     }
 }

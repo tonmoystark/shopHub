@@ -20,83 +20,33 @@ class ProductController extends Controller
         protected CategoryService $categoryService,
     ) {}
 
+
     public function index(Request $request)
     {
-        $search = $request->search;
-        $category = $request->category_id;
-        $status = $request->status;
-        $featured = $request->featured;
-        $stock = $request->stock;
+        $filters = $request->only([
+            'search',
+            'category_id',
+            'status',
+            'featured',
+            'stock',
+        ]);
 
-        $products = Product::with([
-            'category',
-            'images',
-        ])
+        $products = $this->productService
+            ->getFilteredProducts($filters);
 
-            ->when($search, function ($query) use ($search) {
+        $categories = $this->categoryService
+            ->getForSelect();
 
-                $query->where(function ($q) use ($search) {
-
-                    $q->where('name', 'like', "%{$search}%")
-                        ->orWhere('sku', 'like', "%{$search}%");
-                });
-            })
-
-            ->when($category, function ($query) use ($category) {
-
-                $query->where('category_id', $category);
-            })
-
-            ->when($status !== null && $status !== '', function ($query) use ($status) {
-
-                $query->where('status', $status);
-            })
-
-            ->when($featured !== null && $featured !== '', function ($query) use ($featured) {
-
-                $query->where('is_featured', $featured);
-            })
-
-            ->when($stock, function ($query) use ($stock) {
-
-                if ($stock == 'low') {
-
-                    $query->whereBetween('stock', [1, 5]);
-                }
-
-                if ($stock == 'out') {
-
-                    $query->where('stock', 0);
-                }
-
-                if ($stock == 'available') {
-
-                    $query->where('stock', '>', 5);
-                }
-            })
-
-            ->latest()
-
-            ->paginate(10)
-
-            ->withQueryString();
-
-        $categories = $this->categoryService->getForSelect();
-
-        return view(
-            'admin.products.index',
-            compact(
-                'products',
-                'categories',
-                'search',
-                'category',
-                'status',
-                'featured',
-                'stock'
-            )
-        );
+        return view('admin.products.index', [
+            'products' => $products,
+            'categories' => $categories,
+            'search' => $filters['search'] ?? null,
+            'category' => $filters['category_id'] ?? null,
+            'status' => $filters['status'] ?? null,
+            'featured' => $filters['featured'] ?? null,
+            'stock' => $filters['stock'] ?? null,
+        ]);
     }
-
     public function create()
     {
         $categories = Category::orderBy('name')

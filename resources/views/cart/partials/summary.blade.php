@@ -60,10 +60,11 @@
 
     </div>
 
-    <x-ui.button class="mt-8 w-full">
-
-        Proceed To Checkout
-
-    </x-ui.button>
+    <x-ui.button
+    class="mt-8 w-full"
+    disabled
+>
+    Proceed To Checkout
+</x-ui.button>
 
 </x-ui.card>

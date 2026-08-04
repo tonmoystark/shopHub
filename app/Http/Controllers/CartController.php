@@ -6,6 +6,7 @@ use App\Http\Requests\Cart\StoreCartRequest;
 use App\Http\Requests\Cart\UpdateCartRequest;
 use App\Models\Product;
 use App\Services\CartService;
+use DomainException;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -26,27 +27,40 @@ class CartController extends Controller
 
     public function store(StoreCartRequest $request, Product $product)
     {
-        $this->cartService->add(
-            $product,
-            $request->quantity
-        );
+        try {
 
-        return back()->with(
-            'success',
-            'Product added to cart.'
-        );
+            $this->cartService->add(
+                $product,
+                $request->validated()['quantity']
+            );
+
+            return redirect()
+                ->route('cart.index')
+                ->with('success', 'Product added to cart.');
+        } catch (DomainException $e) {
+
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
     public function update(UpdateCartRequest $request, Product $product)
     {
-        $this->cartService->update(
-            $product->id,
-            $request->quantity
-        );
+        try {
 
-        return back()->with(
-            'success',
-            'Cart updated successfully.'
-        );
+            $this->cartService->update(
+                $product,
+                $request->validated()['quantity']
+            );
+
+            return back()
+                ->with('success', 'Cart updated.');
+        } catch (DomainException $e) {
+
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
     public function destroy(Product $product)
     {

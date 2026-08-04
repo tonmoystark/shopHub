@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Cart;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateCartRequest extends FormRequest
 {
@@ -21,7 +20,7 @@ class UpdateCartRequest extends FormRequest
                 'required',
                 'integer',
                 'min:1',
-                Rule::max($product->stock),
+                "max:{$product->stock}",
             ],
         ];
     }

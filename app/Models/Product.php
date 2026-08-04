@@ -72,4 +72,74 @@ class Product extends Model
     {
         return ! is_null($this->sale_price);
     }
+    /*
+|--------------------------------------------------------------------------
+| Query Scopes
+|--------------------------------------------------------------------------
+*/
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', true);
+    }
+
+    public function scopeInStock($query)
+    {
+        return $query->where('stock', '>', 0);
+    }
+    public function scopeWithFrontendData($query)
+    {
+        return $query->with([
+            'category',
+            'images',
+        ]);
+    }
+    public function scopeSearch($query, ?string $search)
+    {
+        if (! $search) {
+            return $query;
+        }
+
+        return $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+                ->orWhere('sku', 'like', "%{$search}%");
+        });
+    }
+    public function scopeCategory($query, $categoryId)
+    {
+        if (! $categoryId) {
+            return $query;
+        }
+
+        return $query->where('category_id', $categoryId);
+    }
+    public function scopeStatus($query, $status)
+    {
+        if ($status === null || $status === '') {
+            return $query;
+        }
+
+        return $query->where('status', $status);
+    }
+    public function scopeFeatured($query, $featured)
+    {
+        if ($featured === null || $featured === '') {
+            return $query;
+        }
+
+        return $query->where('is_featured', $featured);
+    }
+    public function scopeStock($query, ?string $stock)
+    {
+        if (! $stock) {
+            return $query;
+        }
+
+        return match ($stock) {
+            'low' => $query->whereBetween('stock', [1, 5]),
+            'out' => $query->where('stock', 0),
+            'available' => $query->where('stock', '>', 5),
+            default => $query,
+        };
+    }
 }

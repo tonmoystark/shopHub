@@ -90,7 +90,7 @@
                 @csrf
                 @method('DELETE')
 
-                <x-ui.button variant="danger">
+                <x-ui.button type="submit" variant="danger">
                     Remove
                 </x-ui.button>
 
