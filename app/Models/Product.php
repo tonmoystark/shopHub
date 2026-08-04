@@ -44,4 +44,22 @@ class Product extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function currentPrice(): float
+    {
+        return $this->sale_price ?: $this->price;
+    }
+
+    public function primaryImage(): ?ProductImage
+    {
+        return $this->images()->first();
+    }
+    public function isInStock(): bool
+    {
+        return $this->stock > 0;
+    }
+    public function isLowStock(): bool
+    {
+        return $this->stock > 0 && $this->stock <= 5;
+    }
 }
