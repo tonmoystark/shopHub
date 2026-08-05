@@ -9,6 +9,12 @@ class CartService
 {
     private const CART_KEY = 'cart';
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cart Storage
+    |--------------------------------------------------------------------------
+    */
+
     public function getCart(): array
     {
         return session()->get(self::CART_KEY, []);
@@ -18,6 +24,12 @@ class CartService
     {
         session()->put(self::CART_KEY, $cart);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cart Actions
+    |--------------------------------------------------------------------------
+    */
 
     public function add(Product $product, int $quantity = 1): void
     {
@@ -91,6 +103,12 @@ class CartService
         session()->forget(self::CART_KEY);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cart Data
+    |--------------------------------------------------------------------------
+    */
+
     public function items(): array
     {
         return $this->getCart();
@@ -110,15 +128,46 @@ class CartService
         );
     }
 
+    /**
+     * Shipping cost.
+     * Change this later when implementing shipping rules.
+     */
+    public function shipping(): float
+    {
+        return 0.00;
+    }
+
     public function total(): float
     {
-        return $this->subtotal();
+        return $this->subtotal() + $this->shipping();
     }
 
     public function isEmpty(): bool
     {
         return empty($this->getCart());
     }
+
+    public function hasItems(): bool
+    {
+        return ! $this->isEmpty();
+    }
+
+    public function summary(): array
+    {
+        return [
+            'items' => $this->items(),
+            'subtotal' => $this->subtotal(),
+            'shipping' => $this->shipping(),
+            'total' => $this->total(),
+            'count' => $this->count(),
+        ];
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validation
+    |--------------------------------------------------------------------------
+    */
 
     private function validateStock(Product $product, int $quantity): void
     {
@@ -135,6 +184,12 @@ class CartService
         }
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers
+    |--------------------------------------------------------------------------
+    */
+
     private function createCartItem(Product $product, int $quantity): array
     {
         return [
@@ -145,7 +200,10 @@ class CartService
             'unit_price' => $product->currentPrice(),
             'quantity' => $quantity,
             'stock' => $product->stock,
-            'line_total' => $this->calculateLineTotal($product, $quantity),
+            'line_total' => $this->calculateLineTotal(
+                $product,
+                $quantity
+            ),
             'image' => optional($product->primaryImage())->image,
         ];
     }

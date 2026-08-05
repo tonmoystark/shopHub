@@ -131,4 +131,18 @@ class ProductService
             ->latest()
             ->paginate(12);
     }
+    public function decreaseStock(Product $product, int $quantity): void
+    {
+        if ($quantity <= 0) {
+            return;
+        }
+
+        if ($product->stock < $quantity) {
+            throw ValidationException::withMessages([
+                'stock' => "Only {$product->stock} item(s) are available for {$product->name}.",
+            ]);
+        }
+
+        $product->decrement('stock', $quantity);
+    }
 }

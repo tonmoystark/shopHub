@@ -59,12 +59,20 @@ Route::prefix('cart')
 |--------------------------------------------------------------------------
 */
 
-// Route::prefix('checkout')
-//     ->name('checkout.')
-//     ->controller(CheckoutController::class)
-//     ->group(function () {
-//
-//     });
+Route::prefix('checkout')
+    ->name('checkout.')
+    ->controller(CheckoutController::class)
+    ->group(function () {
+
+        Route::get('/', 'index')
+            ->name('index');
+
+        Route::post('/', 'store')
+            ->name('store');
+
+        Route::get('/success/{order}', 'success')
+            ->name('success');
+    });
 
 /*
 |--------------------------------------------------------------------------
