@@ -72,4 +72,44 @@ enum OrderStatus: string
             self::Refunded => [],
         }, true);
     }
+    public function nextStatuses(): array
+    {
+        return match ($this) {
+
+            self::Pending => [
+                self::Pending,
+                self::Confirmed,
+                self::Cancelled,
+            ],
+
+            self::Confirmed => [
+                self::Confirmed,
+                self::Processing,
+                self::Cancelled,
+            ],
+
+            self::Processing => [
+                self::Processing,
+                self::Shipped,
+            ],
+
+            self::Shipped => [
+                self::Shipped,
+                self::Delivered,
+            ],
+
+            self::Delivered => [
+                self::Delivered,
+                self::Refunded,
+            ],
+
+            self::Cancelled => [
+                self::Cancelled,
+            ],
+
+            self::Refunded => [
+                self::Refunded,
+            ],
+        };
+    }
 }

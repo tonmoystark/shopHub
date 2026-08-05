@@ -68,16 +68,16 @@
                 class="mt-2"
             >
 
-                @foreach(\App\Enums\PaymentStatus::options() as $status)
+                @foreach($order->order_status->nextStatuses() as $status)
 
-                    <option
-                        value="{{ $status['value'] }}"
-                        @selected($order->payment_status->value === $status['value'])
-                    >
-                        {{ $status['label'] }}
-                    </option>
+    <option
+        value="{{ $status->value }}"
+        @selected($order->order_status === $status)
+    >
+        {{ $status->label() }}
+    </option>
 
-                @endforeach
+@endforeach
 
             </x-admin.select>
 
