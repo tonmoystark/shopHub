@@ -49,6 +49,12 @@ class Order extends Model
         ];
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -57,5 +63,51 @@ class Order extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Query Scopes
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopeWithRelations($query)
+    {
+        return $query->with([
+            'user',
+            'orderItems.product',
+        ]);
+    }
+
+    public function scopeSearch($query, ?string $search)
+    {
+        if (! $search) {
+            return $query;
+        }
+
+        return $query->where(function ($q) use ($search) {
+
+            $q->where('order_number', 'like', "%{$search}%")
+                ->orWhere('customer_name', 'like', "%{$search}%")
+                ->orWhere('customer_email', 'like', "%{$search}%");
+        });
+    }
+
+    public function scopeOrderStatus($query, $status)
+    {
+        if ($status === null || $status === '') {
+            return $query;
+        }
+
+        return $query->where('order_status', $status);
+    }
+
+    public function scopePaymentStatus($query, $status)
+    {
+        if ($status === null || $status === '') {
+            return $query;
+        }
+
+        return $query->where('payment_status', $status);
     }
 }

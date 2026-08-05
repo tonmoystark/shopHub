@@ -6,6 +6,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProductController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
@@ -91,10 +92,22 @@ Route::middleware(['auth', 'admin'])
         Route::resource('categories', CategoryController::class);
 
         Route::resource('products', ProductController::class);
-        Route::delete(
-            'products/images/{image}',
-            [ProductController::class, 'destroyImage']
-        )->name('products.images.destroy');
+
+        Route::resource('orders', OrderController::class)
+            ->only([
+                'index',
+                'show',
+            ]);
+
+        Route::patch(
+            'orders/{order}/status',
+            [OrderController::class, 'updateStatus']
+        )->name('orders.update-status');
+
+        Route::patch(
+            'orders/{order}/payment-status',
+            [OrderController::class, 'updatePaymentStatus']
+        )->name('orders.update-payment-status');
     });
 
 /*

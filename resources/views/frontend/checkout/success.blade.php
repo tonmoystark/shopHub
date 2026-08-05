@@ -43,19 +43,19 @@
                 </div>
 
                 <div class="flex justify-between py-2">
-                    <span class="font-medium">Payment Method</span>
-                    <span>{{ $order->payment_method->value }}</span>
-                </div>
+    <span class="font-medium">Payment Method</span>
+    <span>{{ $order->payment_method->label() }}</span>
+</div>
 
-                <div class="flex justify-between py-2">
-                    <span class="font-medium">Order Status</span>
-                    <span>{{ $order->order_status->value }}</span>
-                </div>
+<div class="flex justify-between py-2">
+    <span class="font-medium">Order Status</span>
+    <span>{{ $order->order_status->label() }}</span>
+</div>
 
-                <div class="flex justify-between py-2">
-                    <span class="font-medium">Payment Status</span>
-                    <span>{{ $order->payment_status->value }}</span>
-                </div>
+<div class="flex justify-between py-2">
+    <span class="font-medium">Payment Status</span>
+    <span>{{ $order->payment_status->label() }}</span>
+</div>
 
                 <div class="mt-4 border-t pt-4 flex justify-between text-lg font-bold">
                     <span>Total</span>
