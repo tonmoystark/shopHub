@@ -62,7 +62,7 @@
 
     <x-ui.button
     class="mt-8 w-full"
-    disabled
+    :href="route('checkout.index')"
 >
     Proceed To Checkout
 </x-ui.button>

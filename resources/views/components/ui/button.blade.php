@@ -1,6 +1,7 @@
 @props([
     'variant' => 'primary',
     'type' => 'button',
+    'href' => null,
 ])
 
 @php
@@ -15,13 +16,30 @@ $classes = match ($variant) {
 
 };
 
+$baseClasses = "inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold transition {$classes}";
+
 @endphp
 
-<button
-    type="{{ $type }}"
-    {{ $attributes->merge([
-        'class' => "inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold transition {$classes}"
-    ]) }}
->
-    {{ $slot }}
-</button>
+@if($href)
+
+    <a
+        href="{{ $href }}"
+        {{ $attributes->merge([
+            'class' => $baseClasses
+        ]) }}
+    >
+        {{ $slot }}
+    </a>
+
+@else
+
+    <button
+        type="{{ $type }}"
+        {{ $attributes->merge([
+            'class' => $baseClasses
+        ]) }}
+    >
+        {{ $slot }}
+    </button>
+
+@endif

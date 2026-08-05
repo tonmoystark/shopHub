@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,14 +14,23 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'order_number',
+
+        'customer_name',
+        'customer_email',
+        'customer_phone',
+        'shipping_address',
+        'city',
+
         'subtotal',
         'discount',
-        'shipping_charge',
+        'shipping',
         'tax',
         'total',
+
         'payment_method',
         'payment_status',
         'order_status',
+
         'notes',
     ];
 
@@ -29,12 +39,13 @@ class Order extends Model
         return [
             'subtotal' => 'decimal:2',
             'discount' => 'decimal:2',
-            'shipping_charge' => 'decimal:2',
+            'shipping' => 'decimal:2',
             'tax' => 'decimal:2',
             'total' => 'decimal:2',
 
-            'order_status' => OrderStatus::class,
+            'payment_method' => PaymentMethod::class,
             'payment_status' => PaymentStatus::class,
+            'order_status' => OrderStatus::class,
         ];
     }
 
@@ -43,7 +54,7 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function items(): HasMany
+    public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
