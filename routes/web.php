@@ -32,6 +32,28 @@ Route::prefix('products')
             ->name('show');
     });
 
+Route::middleware('auth')
+    ->prefix('account')
+    ->name('account.')
+    ->controller(AccountController::class)
+    ->group(function () {
+
+        Route::get('/', 'dashboard')
+            ->name('dashboard');
+
+        Route::get('/orders', 'orders')
+            ->name('orders.index');
+
+        Route::get('/orders/{order}', 'showOrder')
+            ->name('orders.show');
+
+        Route::get('/profile', 'profile')
+            ->name('profile');
+
+        Route::get('/password', 'password')
+            ->name('password');
+    });
+
 /*
 |--------------------------------------------------------------------------
 | Cart
