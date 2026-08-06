@@ -6,12 +6,15 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'avatar'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -33,5 +36,43 @@ class User extends Authenticatable
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    /*
+|--------------------------------------------------------------------------
+| Avatar
+|--------------------------------------------------------------------------
+*/
+
+    protected function avatarUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->avatar
+                ? asset('storage/' . $this->avatar)
+                : null,
+        );
+    }
+
+    public function deleteAvatar(): void
+    {
+        if (
+            $this->avatar &&
+            Storage::disk('public')->exists($this->avatar)
+        ) {
+
+            Storage::disk('public')->delete(
+                $this->avatar
+            );
+        }
+    }
+
+    public function replaceAvatar(UploadedFile $avatar): void
+    {
+        $this->deleteAvatar();
+
+        $this->avatar = $avatar->store(
+            'avatars',
+            'public'
+        );
     }
 }

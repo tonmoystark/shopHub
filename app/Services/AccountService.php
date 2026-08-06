@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 
 class AccountService
@@ -52,5 +54,24 @@ class AccountService
             ->withRelations()
             ->where('user_id', Auth::id())
             ->findOrFail($orderId);
+    }
+    public function updateProfile(array $data): User
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (
+            isset($data['avatar']) &&
+            $data['avatar'] instanceof UploadedFile
+        ) {
+
+            $user->replaceAvatar($data['avatar']);
+
+            unset($data['avatar']);
+        }
+
+        $user->update($data);
+
+        return $user->fresh();
     }
 }

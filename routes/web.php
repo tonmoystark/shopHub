@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Frontend\AccountController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,10 +51,12 @@ Route::middleware('auth')
         Route::get('/profile', 'profile')
             ->name('profile');
 
+        Route::patch('/profile', 'updateProfile')
+            ->name('profile.update');
+
         Route::get('/password', 'password')
             ->name('password');
     });
-
 /*
 |--------------------------------------------------------------------------
 | Cart

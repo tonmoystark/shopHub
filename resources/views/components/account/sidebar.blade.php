@@ -2,11 +2,21 @@
 
     <div class="mb-6 flex items-center gap-4">
 
-        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
+        @if(auth()->user()->avatar)
 
-            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+    <img
+        src="{{ auth()->user()->avatar_url }}"
+        class="h-12 w-12 rounded-full object-cover"
+        alt="{{ auth()->user()->name }}"
+    >
 
-        </div>
+@else
+
+    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white font-bold">
+        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+    </div>
+
+@endif
 
         <div>
 
