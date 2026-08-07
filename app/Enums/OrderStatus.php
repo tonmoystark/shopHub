@@ -112,4 +112,16 @@ enum OrderStatus: string
             ],
         };
     }
+    public function badgeVariant(): string
+    {
+        return match ($this) {
+
+            self::Delivered => 'success',
+
+            self::Cancelled,
+            self::Refunded => 'danger',
+
+            default => 'warning',
+        };
+    }
 }

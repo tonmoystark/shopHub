@@ -29,4 +29,16 @@ enum PaymentMethod: string
             self::cases()
         );
     }
+
+    public function badgeVariant(): string
+    {
+        return match ($this) {
+
+            self::Paid => 'success',
+
+            self::Failed => 'danger',
+
+            default => 'warning',
+        };
+    }
 }

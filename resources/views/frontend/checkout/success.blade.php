@@ -48,13 +48,31 @@
 </div>
 
 <div class="flex justify-between py-2">
-    <span class="font-medium">Order Status</span>
-    <span>{{ $order->order_status->label() }}</span>
+
+    <span class="font-medium">
+        Order Status
+    </span>
+
+    <x-ui.badge
+        :variant="$order->order_status->badgeVariant()"
+    >
+        {{ $order->order_status->label() }}
+    </x-ui.badge>
+
 </div>
 
 <div class="flex justify-between py-2">
-    <span class="font-medium">Payment Status</span>
-    <span>{{ $order->payment_status->label() }}</span>
+
+    <span class="font-medium">
+        Payment Status
+    </span>
+
+    <x-ui.badge
+        :variant="$order->payment_status->badgeVariant()"
+    >
+        {{ $order->payment_status->label() }}
+    </x-ui.badge>
+
 </div>
 
                 <div class="mt-4 border-t pt-4 flex justify-between text-lg font-bold">
