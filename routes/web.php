@@ -56,6 +56,8 @@ Route::middleware('auth')
 
         Route::get('/password', 'password')
             ->name('password');
+        Route::patch('/password', 'updatePassword')
+            ->name('password.update');
     });
 /*
 |--------------------------------------------------------------------------

@@ -9,4 +9,8 @@ import "./frontend/order-summary";
 window.Alpine = Alpine;
 window.Swal = Swal;
 
+import { createIcons, icons } from "lucide";
+
+createIcons({ icons });
+
 Alpine.start();

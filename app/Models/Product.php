@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
     use SoftDeletes;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mass Assignment
+    |--------------------------------------------------------------------------
+    */
 
     protected $fillable = [
         'category_id',
@@ -24,12 +31,24 @@ class Product extends Model
         'is_featured',
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Attribute Casting
+    |--------------------------------------------------------------------------
+    */
+
     protected $casts = [
         'status' => 'boolean',
         'is_featured' => 'boolean',
         'price' => 'decimal:2',
         'sale_price' => 'decimal:2',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function category(): BelongsTo
     {
@@ -40,10 +59,17 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class);
     }
+
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Business Logic
+    |--------------------------------------------------------------------------
+    */
 
     public function currentPrice(): float
     {
@@ -54,29 +80,73 @@ class Product extends Model
     {
         return $this->images->first();
     }
+
     public function isInStock(): bool
     {
         return $this->stock > 0;
     }
+
     public function isLowStock(): bool
     {
         return $this->stock > 0 && $this->stock <= 5;
     }
+
+    public function isOnSale(): bool
+    {
+        return ! is_null($this->sale_price);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    */
+
     public function getPrimaryImageUrlAttribute(): string
     {
         return $this->primaryImage()
             ? asset('storage/' . $this->primaryImage()->image)
             : asset('images/placeholder-product.png');
     }
-    public function isOnSale(): bool
+
+    protected function originalPrice(): Attribute
     {
-        return ! is_null($this->sale_price);
+        return Attribute::make(
+            get: fn() => $this->price,
+        );
     }
+
+    protected function currentPriceValue(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->currentPrice(),
+        );
+    }
+
+    protected function discountPercentage(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+
+                if (
+                    ! $this->sale_price ||
+                    $this->price <= 0
+                ) {
+                    return null;
+                }
+
+                return round(
+                    (($this->price - $this->sale_price) / $this->price) * 100
+                );
+            },
+        );
+    }
+
     /*
-|--------------------------------------------------------------------------
-| Query Scopes
-|--------------------------------------------------------------------------
-*/
+    |--------------------------------------------------------------------------
+    | Query Scopes
+    |--------------------------------------------------------------------------
+    */
 
     public function scopeActive($query)
     {
@@ -87,6 +157,7 @@ class Product extends Model
     {
         return $query->where('stock', '>', 0);
     }
+
     public function scopeWithFrontendData($query)
     {
         return $query->with([
@@ -94,6 +165,7 @@ class Product extends Model
             'images',
         ]);
     }
+
     public function scopeSearch($query, ?string $search)
     {
         if (! $search) {
@@ -105,6 +177,7 @@ class Product extends Model
                 ->orWhere('sku', 'like', "%{$search}%");
         });
     }
+
     public function scopeCategory($query, $categoryId)
     {
         if (! $categoryId) {
@@ -113,6 +186,7 @@ class Product extends Model
 
         return $query->where('category_id', $categoryId);
     }
+
     public function scopeStatus($query, $status)
     {
         if ($status === null || $status === '') {
@@ -121,6 +195,7 @@ class Product extends Model
 
         return $query->where('status', $status);
     }
+
     public function scopeFeatured($query, $featured)
     {
         if ($featured === null || $featured === '') {
@@ -129,6 +204,7 @@ class Product extends Model
 
         return $query->where('is_featured', $featured);
     }
+
     public function scopeStock($query, ?string $stock)
     {
         if (! $stock) {

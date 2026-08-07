@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AccountService
 {
@@ -73,5 +74,22 @@ class AccountService
         $user->update($data);
 
         return $user->fresh();
+    }
+
+    public function changePassword(array $data): void
+    {
+        $user = Auth::user();
+
+        $user->update([
+            'password' => Hash::make(
+                $data['password']
+            ),
+        ]);
+    }
+    public function profile(): array
+    {
+        return [
+            'user' => auth()->user(),
+        ];
     }
 }

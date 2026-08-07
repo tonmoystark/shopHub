@@ -72,33 +72,10 @@
         </h3>
 
         {{-- Price --}}
-        <div class="mt-4 flex items-center gap-3">
-
-            @if($product->sale_price)
-
-                <span class="text-xl font-bold text-blue-600">
-
-                    ৳{{ number_format($product->sale_price, 2) }}
-
-                </span>
-
-                <span class="text-sm text-gray-400 line-through">
-
-                    ৳{{ number_format($product->price, 2) }}
-
-                </span>
-
-            @else
-
-                <span class="text-xl font-bold text-blue-600">
-
-                    ৳{{ number_format($product->price, 2) }}
-
-                </span>
-
-            @endif
-
-        </div>
+        <x-ui.product-price
+    :product="$product"
+    class="mt-4"
+/>
 
         {{-- Actions --}}
         <div class="mt-6 flex gap-3">

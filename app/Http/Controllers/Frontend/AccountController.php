@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Account\ChangePasswordRequest;
 use App\Http\Requests\Account\UpdateProfileRequest;
 use App\Services\AccountService;
 
@@ -44,7 +45,10 @@ class AccountController extends Controller
 
     public function profile()
     {
-        return view('frontend.account.profile');
+        return view(
+            'frontend.account.profile',
+            $this->accountService->profile()
+        );
     }
 
     public function password()
@@ -62,6 +66,20 @@ class AccountController extends Controller
             ->with(
                 'success',
                 'Profile updated successfully.'
+            );
+    }
+    public function updatePassword(
+        ChangePasswordRequest $request
+    ) {
+        $this->accountService->changePassword(
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('account.password')
+            ->with(
+                'success',
+                'Password updated successfully.'
             );
     }
 }

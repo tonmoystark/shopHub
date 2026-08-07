@@ -45,7 +45,7 @@
             variant="danger"
             class="flex w-full items-center justify-center gap-2"
         >
-            <x-lucide-log-out class="h-5 w-5" />
+            {{-- <x-lucide-log-out class="h-5 w-5" /> --}}
 
             Logout
         </x-ui.button>

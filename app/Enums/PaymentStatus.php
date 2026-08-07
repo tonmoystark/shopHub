@@ -32,4 +32,17 @@ enum PaymentStatus: string
             self::cases()
         );
     }
+    public function badgeVariant(): string
+    {
+        return match ($this) {
+
+            self::Pending => 'warning',
+
+            self::Paid => 'success',
+
+            self::Failed => 'danger',
+
+            self::Refunded => 'secondary',
+        };
+    }
 }

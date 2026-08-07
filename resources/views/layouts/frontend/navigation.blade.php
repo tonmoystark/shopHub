@@ -1,29 +1,29 @@
-<nav class="border-b bg-white">
+<header class="sticky top-0 z-50 border-b bg-white/90 backdrop-blur">
 
-    <div class="container mx-auto flex items-center justify-between px-6 py-4">
+    <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
-        <a
-            href="{{ route('home') }}"
-            class="text-2xl font-bold"
-        >
-            ShopHub
-        </a>
+        @include('layouts.frontend.partials.logo')
 
-        <div class="flex items-center gap-6">
+        @include('layouts.frontend.partials.nav-links')
 
-            <a href="{{ route('home') }}">
-                Home
-            </a>
+        <div class="flex items-center gap-4">
 
-            <a href="{{ route('cart.index') }}">
-                Cart
-                @if($cartCount > 0)
-                    ({{ $cartCount }})
-                @endif
-            </a>
+            @include('layouts.frontend.partials.cart-button')
+
+            @auth
+
+                @include('layouts.frontend.partials.user-menu')
+
+            @else
+
+                @include('layouts.frontend.partials.guest-menu')
+
+            @endauth
+
+            @include('layouts.frontend.partials.mobile-menu')
 
         </div>
 
     </div>
 
-</nav>
+</header>
