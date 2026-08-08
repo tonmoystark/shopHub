@@ -4,7 +4,7 @@
 
 <a
     href="{{ route('products.index', [
-        'category' => $category->id,
+        'category_id' => $category->id,
     ]) }}"
     {{ $attributes->merge([
         'class' => 'group block'

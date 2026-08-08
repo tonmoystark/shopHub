@@ -87,7 +87,8 @@ Route::prefix('cart')
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('checkout')
+Route::middleware('auth')
+    ->prefix('checkout')
     ->name('checkout.')
     ->controller(CheckoutController::class)
     ->group(function () {

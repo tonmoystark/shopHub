@@ -1,39 +1,94 @@
-<nav class="flex items-center justify-between bg-white p-4 shadow">
+<nav class="sticky top-0 z-30 border-b bg-white">
 
-    <div class="flex items-center gap-4">
+    <div class="flex h-16 items-center justify-between px-4 sm:px-6">
 
-        {{-- Hamburger --}}
-        <button
-            class="rounded-lg p-2 hover:bg-gray-100 lg:hidden"
-            @click="sidebarOpen = !sidebarOpen"
-        >
+        {{-- Left --}}
+        <div class="flex items-center gap-4">
 
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            {{-- Mobile Menu --}}
+            <button
+                type="button"
+                class="rounded-lg p-2 text-gray-600 transition hover:bg-gray-100 lg:hidden"
+                @click="sidebarOpen = !sidebarOpen"
             >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                />
 
-            </svg>
+                <i
+                    x-show="!sidebarOpen"
+                    data-lucide="menu"
+                    class="h-6 w-6"
+                ></i>
 
-        </button>
+                <i
+                    x-show="sidebarOpen"
+                    data-lucide="x"
+                    class="h-6 w-6"
+                ></i>
 
-        <h1 class="font-bold">
-            Admin Panel
-        </h1>
+            </button>
+
+
+            <div>
+
+                <h1 class="text-lg font-semibold text-gray-900">
+                    Admin Panel
+                </h1>
+
+                <p class="hidden text-xs text-gray-500 sm:block">
+                    Manage your ShopHub store
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {{-- Right --}}
+        <div class="flex items-center gap-4">
+
+            {{-- View Store --}}
+            <a
+                href="{{ route('home') }}"
+                target="_blank"
+                class="hidden items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-blue-600 sm:flex"
+            >
+
+                <i
+                    data-lucide="external-link"
+                    class="h-4 w-4"
+                ></i>
+
+                View Store
+
+            </a>
+
+
+            {{-- User --}}
+            <div class="flex items-center gap-3 border-l pl-4">
+
+                <div class="hidden text-right sm:block">
+
+                    <p class="text-sm font-semibold text-gray-900">
+                        {{ Auth::user()->name }}
+                    </p>
+
+                    <p class="text-xs text-gray-500">
+                        Administrator
+                    </p>
+
+                </div>
+
+
+                {{-- Avatar --}}
+                <img
+                    src="{{ Auth::user()->avatar_url }}"
+                    alt="{{ Auth::user()->name }}"
+                    class="h-10 w-10 rounded-full border object-cover"
+                >
+
+            </div>
+
+        </div>
 
     </div>
-
-    <p>
-        {{ Auth::user()->name }}
-    </p>
 
 </nav>

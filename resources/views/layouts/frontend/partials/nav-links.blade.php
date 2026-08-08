@@ -15,10 +15,10 @@
     </x-ui.nav-link>
 
     <x-ui.nav-link
-        href="#categories"
-        :active="false"
-    >
-        Categories
-    </x-ui.nav-link>
+    :href="route('home') . '#categories'"
+    :active="false"
+>
+    Categories
+</x-ui.nav-link>
 
 </nav>

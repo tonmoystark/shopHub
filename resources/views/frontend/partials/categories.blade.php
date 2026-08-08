@@ -1,4 +1,4 @@
-<x-ui.section>
+<x-ui.section id="categories">
 
     <x-ui.section-header
         title="Shop by Category"

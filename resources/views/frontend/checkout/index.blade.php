@@ -34,11 +34,11 @@
                         </x-ui.label>
 
                         <x-ui.input
-                            id="customer_name"
-                            name="customer_name"
-                            :value="old('customer_name')"
-                            required
-                        />
+    id="customer_name"
+    name="customer_name"
+    :value="old('customer_name', auth()->user()->name)"
+    required
+/>
 
                         @error('customer_name')
                             <p class="mt-1 text-sm text-red-600">
@@ -53,12 +53,12 @@
                         </x-ui.label>
 
                         <x-ui.input
-                            id="customer_email"
-                            type="email"
-                            name="customer_email"
-                            :value="old('customer_email')"
-                            required
-                        />
+    id="customer_email"
+    type="email"
+    name="customer_email"
+    :value="old('customer_email', auth()->user()->email)"
+    required
+/>
 
                         @error('customer_email')
                             <p class="mt-1 text-sm text-red-600">

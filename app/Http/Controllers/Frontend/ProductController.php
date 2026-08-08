@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -12,10 +13,18 @@ class ProductController extends Controller
         protected ProductService $productService
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
+        $filters = $request->only([
+            'search',
+            'category_id',
+            'status',
+            'featured',
+            'stock',
+        ]);
+
         $products = $this->productService
-            ->getFrontendProducts();
+            ->getFilteredProducts($filters);
 
         return view(
             'frontend.products.index',

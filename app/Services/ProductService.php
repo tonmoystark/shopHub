@@ -19,6 +19,7 @@ class ProductService
     public function getFilteredProducts(array $filters)
     {
         return Product::query()
+            ->active()
             ->withFrontendData()
             ->search($filters['search'] ?? null)
             ->category($filters['category_id'] ?? null)

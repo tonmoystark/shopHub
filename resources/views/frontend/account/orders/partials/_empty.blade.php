@@ -1,34 +1,27 @@
-@extends('layouts.frontend')
+<div class="py-10 text-center">
 
-@section('content')
+    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
 
-<x-account.page
-    title="My Orders"
-    description="View and track all of your orders."
->
+        <i
+            data-lucide="shopping-bag"
+            class="h-8 w-8 text-gray-400"
+        ></i>
 
-    <x-ui.flash />
+    </div>
 
-    <x-ui.card class="p-6">
+    <h3 class="mt-4 text-lg font-semibold text-gray-900">
+        No Orders Yet
+    </h3>
 
-        @if($orders->isEmpty())
+    <p class="mt-2 text-sm text-gray-500">
+        You haven't placed any orders yet.
+    </p>
 
-            @include('frontend.account.orders.partials._empty')
+    <x-ui.button
+        :href="route('products.index')"
+        class="mt-6"
+    >
+        Start Shopping
+    </x-ui.button>
 
-        @else
-
-            @include('frontend.account.orders.partials._table')
-
-            <div class="mt-6">
-
-                {{ $orders->links() }}
-
-            </div>
-
-        @endif
-
-    </x-ui.card>
-
-</x-account.page>
-
-@endsection
+</div>

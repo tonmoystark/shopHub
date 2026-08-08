@@ -1,60 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShopHub Admin</title>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>
+        @yield('title', 'Admin Panel') - ShopHub
+    </title>
+
+    @vite([
+        'resources/css/app.css',
+        'resources/js/app.js'
+    ])
+
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 text-gray-900">
 
-    <div class="flex min-h-screen" x-data="{ sidebarOpen: false }">
+    <div
+        class="min-h-screen"
+        x-data="{ sidebarOpen: false }"
+    >
 
         {{-- Sidebar --}}
         @include('admin.partials.sidebar')
 
-        {{-- Main Content --}}
-        <div class="flex-1">
+
+        {{-- Main Area --}}
+        <div class="lg:pl-64">
 
             {{-- Navbar --}}
             @include('admin.partials.navbar')
 
-            <main class="p-6">
+
+            {{-- Content --}}
+            <main class="p-4 sm:p-6 lg:p-8">
+
                 @include('admin.partials.flash-message')
+
                 @yield('content')
+
             </main>
 
         </div>
 
     </div>
-@if (session('success'))
-<script>
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: "{{ session('success') }}",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-    });
-</script>
-@endif
 
-@if (session('error'))
-<script>
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title: "{{ session('error') }}",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-    });
-</script>
-@endif
 </body>
+
 </html>

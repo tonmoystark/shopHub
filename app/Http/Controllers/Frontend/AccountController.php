@@ -26,7 +26,6 @@ class AccountController extends Controller
     public function orders()
     {
         $orders = $this->accountService->getOrders();
-
         return view(
             'frontend.account.orders.index',
             compact('orders')
