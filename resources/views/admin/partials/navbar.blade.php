@@ -1,4 +1,4 @@
-<nav class="sticky top-0 z-30 border-b bg-white">
+<nav class="sticky top-0 z-30  border-b bg-white">
 
     <div class="flex h-16 items-center justify-between px-4 sm:px-6">
 

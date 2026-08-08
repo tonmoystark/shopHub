@@ -28,7 +28,8 @@
         @yield('content')
 
     </main>
-
+{{-- Footer --}}
+    @include('frontend.partials.footer')
 </body>
 
 </html>

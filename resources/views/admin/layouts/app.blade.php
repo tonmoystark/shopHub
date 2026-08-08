@@ -24,7 +24,7 @@
 <body class="bg-gray-100 text-gray-900">
 
     <div
-        class="min-h-screen"
+        class="min-h-screen lg:flex"
         x-data="{ sidebarOpen: false }"
     >
 
@@ -33,7 +33,7 @@
 
 
         {{-- Main Area --}}
-        <div class="lg:pl-64">
+        <div class="w-full">
 
             {{-- Navbar --}}
             @include('admin.partials.navbar')
